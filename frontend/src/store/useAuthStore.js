@@ -3,7 +3,7 @@ import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const BASE_URL = "http://localhost:5001";
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001" : "/"; // This is how we can use the same code for both development and production environments. If we're in development, we'll use the localhost URL. If we're in production, we'll use the relative URL.
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,
