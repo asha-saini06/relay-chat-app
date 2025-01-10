@@ -47,27 +47,31 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  // Listen to new messages
   subscribeToMessages: () => {
     const { selectedUser } = get();
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
 
+    // socket.on() is used to listen to events from the backend
     socket.on("newMessage", (newMessage) => {
       const isMessageSentFromSelectedUser =
-        newMessage.senderId === selectedUser._id;
+        newMessage.senderId === selectedUser._id; // Check if the new message is sent from the selected user
       if (!isMessageSentFromSelectedUser) return;
-
+      // set() is used to update the state
       set({
         messages: [...get().messages, newMessage],
       });
     });
   },
 
+  // Stop listening to new messages
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
     socket.off("newMessage");
   },
 
+  // Set the selected user
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 }));
